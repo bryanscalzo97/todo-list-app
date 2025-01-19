@@ -2,7 +2,7 @@ import { View, Text } from 'react-native';
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const index = () => {
+const TodoList = () => {
   return (
     <SafeAreaView>
       <View>
@@ -12,4 +12,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default TodoList;

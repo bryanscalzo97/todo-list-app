@@ -1,14 +1,14 @@
 import { View, Text, SafeAreaView } from 'react-native';
 import React from 'react';
 
-const editTask = () => {
+const EditTask = () => {
   return (
     <SafeAreaView>
       <View>
-        <Text>editTask</Text>
+        <Text>EditTask</Text>
       </View>
     </SafeAreaView>
   );
 };
 
-export default editTask;
+export default EditTask;

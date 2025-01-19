@@ -1,7 +1,7 @@
 import { View, Text, SafeAreaView } from 'react-native';
 import React from 'react';
 
-const index = () => {
+const Login = () => {
   return (
     <SafeAreaView>
       <View>
@@ -11,4 +11,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Login;
