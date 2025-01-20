@@ -2,7 +2,7 @@ import { View, SafeAreaView, TextInput, Button, Alert, Text } from 'react-native
 import React from 'react';
 import { useRouter } from 'expo-router';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { registerUser } from '@/db/auth';
+import { loginUser } from '@/db/auth';
 
 const Login = () => {
   const router = useRouter();
@@ -14,8 +14,8 @@ const Login = () => {
   };
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
-    registerUser(data.email, data.password).then((success: boolean) => {
-      if (success) router.push('/todos');
+    loginUser(data.email, data.password).then((success: boolean) => {
+      if (success) router.push('/(auth)/todos');
       else Alert.alert('Error', 'Invalid email or password');
     });
   };

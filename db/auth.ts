@@ -1,4 +1,5 @@
 import * as SQLite from 'expo-sqlite';
+import * as SecureStore from 'expo-secure-store';
 
 // Initialize the database by creating the 'users' and 'todos' tables if they don't exist
 export async function initializeDatabase() {
@@ -44,6 +45,8 @@ export const registerUser = async (email: string, password: string): Promise<boo
   } catch (error) {
     console.error('Error registering user:', error);
     return false;
+  } finally {
+    await SecureStore.setItemAsync('user_session', email);
   }
 };
 
@@ -52,9 +55,21 @@ export const loginUser = async (email: string, password: string): Promise<boolea
   try {
     const db = await SQLite.openDatabaseAsync('users.db');
     const user = await db.getFirstAsync('SELECT * FROM users WHERE email = ? AND password = ?;', email, password);
-    return !!user; // Return true if the user exists, otherwise false
+    if (user) {
+      await SecureStore.setItemAsync('user_session', email);
+      return true;
+    }
+    return false;
   } catch (error) {
     console.error('Error logging in user:', error);
     return false;
+  }
+};
+
+export const logoutUser = async (): Promise<void> => {
+  try {
+    await SecureStore.deleteItemAsync('user_session');
+  } catch (error) {
+    console.error('Error during logout:', error);
   }
 };
