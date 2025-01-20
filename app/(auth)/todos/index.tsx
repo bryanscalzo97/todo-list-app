@@ -82,16 +82,10 @@ export default function TodoList() {
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16 }}>
         <Text style={styles.header}>Todo List</Text>
-
-        {/* <TouchableOpacity onPress={handleLogout}>
-          <Ionicons name="ellipsis-vertical" size={22} />
-        </TouchableOpacity> */}
         <BottomMenu options={menuOptions} />
       </View>
 
       <View style={{ flex: 1, padding: 16 }}>
-        <Button title="Add Task" onPress={() => router.push('/todos/addTask')} />
-
         {isLoading ? (
           <Text style={{ marginTop: 16 }}>Loading tasks...</Text>
         ) : todos.length > 0 ? (
@@ -99,6 +93,10 @@ export default function TodoList() {
         ) : (
           <Text style={{ marginTop: 16 }}>No tasks available</Text>
         )}
+
+        <TouchableOpacity style={styles.button} onPress={() => router.push('/todos/addTask')}>
+          <Text style={styles.buttonText}>Add Task</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -126,5 +124,17 @@ const styles = StyleSheet.create({
   },
   todoStatus: {
     fontSize: 14,
+  },
+  button: {
+    backgroundColor: '#007BFF',
+    borderRadius: 25,
+    paddingVertical: 10,
+    paddingHorizontal: 35,
+    alignSelf: 'center',
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
