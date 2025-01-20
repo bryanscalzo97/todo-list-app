@@ -1,7 +1,8 @@
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { FlatList, Text, View, Button, TouchableOpacity, Alert } from 'react-native';
+import { FlatList, Text, View, Button, TouchableOpacity, Alert, StyleSheet } from 'react-native';
 import { deleteTodo, getTodos } from '@/db/todos';
+import { logoutUser } from '@/db/auth';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function TodoList() {
@@ -42,24 +43,28 @@ export default function TodoList() {
     ]);
   };
 
+  const handleLogout = async () => {
+    Alert.alert('Logout', 'Are you sure you want to log out?', [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'Logout',
+        style: 'destructive',
+        onPress: async () => {
+          await logoutUser();
+          router.replace('/'); // Redirige al login
+        },
+      },
+    ]);
+  };
+
   const renderTodoItem = ({ item }: { item: any }) => (
-    <TouchableOpacity
-      onPress={() => router.push(`/todos/editTask?id=${item.id}`)}
-      style={{
-        padding: 16,
-        marginVertical: 8,
-        backgroundColor: '#f9f9f9',
-        borderRadius: 8,
-        borderColor: '#ddd',
-        borderWidth: 1,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-      }}
-    >
+    <TouchableOpacity onPress={() => router.push(`/todos/editTask?id=${item.id}`)} style={styles.todoItem}>
       <View>
-        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item.title}</Text>
-        <Text style={{ fontSize: 14, color: item.status ? 'green' : 'red' }}>
+        <Text style={styles.todoTitle}>{item.title}</Text>
+        <Text style={[styles.todoStatus, { color: item.status ? 'green' : 'red' }]}>
           {item.status ? 'Completed' : 'Pending'}
         </Text>
       </View>
@@ -69,6 +74,11 @@ export default function TodoList() {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16 }}>
+        <Text style={styles.header}>Todo List</Text>
+        <Button title="Logout" onPress={handleLogout} color="red" />
+      </View>
+
       <View style={{ flex: 1, padding: 16 }}>
         <Button title="Add Task" onPress={() => router.push('/todos/addTask')} />
 
@@ -83,3 +93,28 @@ export default function TodoList() {
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  header: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  todoItem: {
+    padding: 16,
+    marginVertical: 8,
+    backgroundColor: '#f9f9f9',
+    borderRadius: 8,
+    borderColor: '#ddd',
+    borderWidth: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  todoTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  todoStatus: {
+    fontSize: 14,
+  },
+});
