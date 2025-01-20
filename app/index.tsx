@@ -1,4 +1,3 @@
-import React from 'react';
 import { View, SafeAreaView, TextInput, Alert, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';

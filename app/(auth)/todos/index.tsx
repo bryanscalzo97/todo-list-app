@@ -4,6 +4,7 @@ import { FlatList, Text, View, Button, TouchableOpacity, Alert, StyleSheet } fro
 import { deleteTodo, getTodos } from '@/db/todos';
 import { logoutUser } from '@/db/auth';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import BottomMenu from '@/components/BottomMenu';
 
 export default function TodoList() {
   const router = useRouter();
@@ -54,7 +55,7 @@ export default function TodoList() {
         style: 'destructive',
         onPress: async () => {
           await logoutUser();
-          router.replace('/'); // Redirige al login
+          router.replace('/');
         },
       },
     ]);
@@ -71,12 +72,21 @@ export default function TodoList() {
       <Button title="Delete" onPress={() => handleDelete(item.id)} color="red" />
     </TouchableOpacity>
   );
-
+  const menuOptions = [
+    {
+      label: 'Logout',
+      onPress: handleLogout,
+    },
+  ];
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16 }}>
         <Text style={styles.header}>Todo List</Text>
-        <Button title="Logout" onPress={handleLogout} color="red" />
+
+        {/* <TouchableOpacity onPress={handleLogout}>
+          <Ionicons name="ellipsis-vertical" size={22} />
+        </TouchableOpacity> */}
+        <BottomMenu options={menuOptions} />
       </View>
 
       <View style={{ flex: 1, padding: 16 }}>
