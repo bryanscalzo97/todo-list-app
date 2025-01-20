@@ -38,8 +38,8 @@ const SignUp = () => {
             <TextInput placeholder="Password" secureTextEntry onChangeText={onChange} value={value} />
           )}
         />
-        <Button title="Login" onPress={handleSubmit(onSubmit)} />
-        <Button title="Go to Signup" onPress={() => router.push('/signup')} />
+        <Button title="Signup" onPress={handleSubmit(onSubmit)} />
+        <Button title="Have an account? go to login" onPress={() => router.push('/')} />
       </View>
     </SafeAreaView>
   );

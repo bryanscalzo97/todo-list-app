@@ -42,6 +42,10 @@ export default function RootLayout() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
         <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="signup" options={{ headerShown: false }} />
+        <Stack.Screen name="todos/index" options={{ headerShown: false }} />
+        <Stack.Screen name="todos/addTask" options={{ headerShown: false }} />
+        <Stack.Screen name="todos/editTask" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />
