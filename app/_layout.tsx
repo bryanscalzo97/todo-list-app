@@ -2,9 +2,10 @@ import { useFonts } from 'expo-font';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
 import * as SecureStore from 'expo-secure-store';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { initializeDatabase } from '@/db/auth';
 
@@ -57,7 +58,7 @@ export default function RootLayout() {
   }
 
   return (
-    <>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <Stack>
         <Stack.Screen name="index" options={{ headerShown: false }} />
 
@@ -67,6 +68,6 @@ export default function RootLayout() {
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />
-    </>
+    </GestureHandlerRootView>
   );
 }

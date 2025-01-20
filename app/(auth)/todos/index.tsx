@@ -1,10 +1,13 @@
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { FlatList, Text, View, Button, TouchableOpacity, Alert, StyleSheet } from 'react-native';
+import { FlatList, Text, View, Alert, StyleSheet } from 'react-native';
 import { deleteTodo, getTodos } from '@/db/todos';
 import { logoutUser } from '@/db/auth';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import BottomMenu from '@/components/BottomMenu';
+import { Swipeable, TouchableOpacity } from 'react-native-gesture-handler';
+import Animated, { Layout } from 'react-native-reanimated';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function TodoList() {
   const router = useRouter();
@@ -61,27 +64,56 @@ export default function TodoList() {
     ]);
   };
 
-  const renderTodoItem = ({ item }: { item: any }) => (
-    <TouchableOpacity onPress={() => router.push(`/todos/editTask?id=${item.id}`)} style={styles.todoItem}>
-      <View>
-        <Text style={styles.todoTitle}>{item.title}</Text>
-        <Text style={[styles.todoStatus, { color: item.status ? 'green' : 'red' }]}>
-          {item.status ? 'Completed' : 'Pending'}
-        </Text>
-      </View>
-      <Button title="Delete" onPress={() => handleDelete(item.id)} color="red" />
-    </TouchableOpacity>
-  );
   const menuOptions = [
     {
       label: 'Logout',
       onPress: handleLogout,
     },
   ];
+
+  const renderTodoItem = ({ item }: { item: any }) => (
+    <Animated.View layout={Layout.springify().mass(0.8)}>
+      <Swipeable
+        renderRightActions={() => (
+          <TouchableOpacity
+            onPress={() => handleDelete(item.id)}
+            style={{
+              backgroundColor: 'red',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginVertical: 8,
+              marginBottom: 8,
+              height: 70,
+              padding: 16,
+              gap: 4,
+            }}
+          >
+            <Ionicons name="trash" size={22} color={'white'} />
+            <Text style={{ color: 'white', fontWeight: '600' }}>Delete</Text>
+          </TouchableOpacity>
+        )}
+      >
+        <TouchableOpacity onPress={() => router.push(`/todos/editTask?id=${item.id}`)} style={styles.todoItem}>
+          <View>
+            <Text style={styles.todoTitle} numberOfLines={1}>
+              {item.title}
+            </Text>
+            <Text style={[styles.todoStatus, { color: item.status ? 'green' : 'red' }]}>
+              {item.status ? 'Completed' : 'Pending'}
+            </Text>
+          </View>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+            <Ionicons name={'chevron-forward-sharp'} color={'black'} size={18} />
+          </View>
+        </TouchableOpacity>
+      </Swipeable>
+    </Animated.View>
+  );
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16 }}>
-        <Text style={styles.header}>Todo List</Text>
+        <Text style={styles.header}>My List</Text>
         <BottomMenu options={menuOptions} />
       </View>
 
@@ -91,7 +123,9 @@ export default function TodoList() {
         ) : todos.length > 0 ? (
           <FlatList data={todos} keyExtractor={(item) => item.id.toString()} renderItem={renderTodoItem} />
         ) : (
-          <Text style={{ marginTop: 16 }}>No tasks available</Text>
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <Text style={{ marginTop: 16 }}>No tasks available</Text>
+          </View>
         )}
 
         <TouchableOpacity style={styles.button} onPress={() => router.push('/todos/addTask')}>
@@ -117,6 +151,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    height: 70,
   },
   todoTitle: {
     fontSize: 18,
